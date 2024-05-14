@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
         {
             if (lives > 0) ball.LaunchBall();
         }
+        CheckLevelCompleted();
 
     }
     public void LoseHealth()
@@ -56,10 +59,20 @@ public class GameManager : MonoBehaviour
 
     public void CheckLevelCompleted()
     {
-        if (transform.childCount <= 1) VictoryScreen();
+        bool allObjectsInactive = true;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                allObjectsInactive = false;
+                break;
+            }
+        }
+        if (allObjectsInactive) VictoryScreen();
     }
     public void DefeatScreen()
     {
+        Time.timeScale = 0f;
         if (defeatScreen == null) return;
         defeatScreen.SetActive(true);
     }
@@ -72,6 +85,10 @@ public class GameManager : MonoBehaviour
     public void Exit()
     {
         Application.Quit();
+    }
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
     
 }

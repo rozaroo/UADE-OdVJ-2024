@@ -29,7 +29,7 @@ public class Ball : MonoBehaviour
             LaunchBall();
             readyToLaunch = false;
         }
-        if (gameManager.lives > 0) transform.position += velocity * Time.deltaTime;
+        //if (gameManager.lives > 0) transform.position += velocity * Time.deltaTime;
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -64,5 +64,15 @@ public class Ball : MonoBehaviour
     void LaunchBall()
     {
         velocity = new Vector3(Random.Range(-1, 1f, 1.1f), 1, 0).normalized * speed;
+    }
+    public void LaunchMultipleBalls(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 offset = new Vector3(Random.Range(-0.5f, 0.5f), 0, 0); //Ajuste de rango según sea necesario
+            Vector3 newPosition = FindObjectOfType<Player>().transform.position + offset;
+            GameObject newBall = Instantiate(gameObject, newPosition, Quaternion.identity);
+            newBall.GetComponent<Ball>().LaunchBall();
+        }
     }
 }
