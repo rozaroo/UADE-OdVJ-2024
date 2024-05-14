@@ -24,7 +24,10 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Escape)) Exit();
         if (Input.GetKeyUp(KeyCode.R)) ResetGame();
-
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (lives > 0) ball.LaunchBall();
+        }
 
     }
     public void LoseHealth()

@@ -9,6 +9,7 @@ public class Ball : MonoBehaviour
     Vector3 startPosition;
     GameManager gameManager;
     public static Ball Instance;
+    private bool readyToLaunch = true;
 
     public void Awake()
     {
@@ -18,11 +19,16 @@ public class Ball : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.Instance;
-        startPosition = transform.position;
+        startPosition = new Vector3(FindObjectOfType<Player>().transform.position.x, FindObjectOfType<Player>().transform.position.y + 0.5f, 0);
         ResetBall();
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space) && readyToLaunch)
+        {
+            LaunchBall();
+            readyToLaunch = false;
+        }
         if (gameManager.lives > 0) transform.position += velocity * Time.deltaTime;
     }
     private void OnCollisionEnter(Collision collision)
@@ -31,6 +37,7 @@ public class Ball : MonoBehaviour
         { 
             gameManager.LoseHealth();
             ResetBall();
+            readyToLaunch=true;
         }
         else if (collision.gameObject.CompareTag("Player"))
         {
@@ -51,7 +58,11 @@ public class Ball : MonoBehaviour
     }
     public void ResetBall()
     {
-        transform.position = startPosition;
-        velocity = new Vector3(Random.Range(-1.1f,1.1f),1,0).normalized * speed;
+        transform.position = new Vector3(FindObjectOfType<Player>().transform.position.x, FindObjectOfType<Player>().transform.position.y + 0.5f, 0);
+        velocity = Vector3.zero;
+    }
+    void LaunchBall()
+    {
+        velocity = new Vector3(Random.Range(-1, 1f, 1.1f), 1, 0).normalized * speed;
     }
 }
